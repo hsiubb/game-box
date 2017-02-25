@@ -1,0 +1,21 @@
+@charset 'utf-8';
+
+*{margin: 0;padding: 0;}
+html {font-family: Arial,"Microsoft YaHei";}
+a {color: inherit;text-decoration: none;outline-style: none;}
+ul, ol, li {list-style: none;}
+img {border: 0 none;}
+
+.fl {float: left; _display: inline;}
+.fr {float: right; _display: inline;}
+.clr {clear: both; height: 0; overflow: hidden;}
+.clrfix {*zoom: 1;}
+.clrfix:before, .clrfix:after {content: '\0020';display: block;height: 0;clear: both;visibility: hidden;}
+
+#snow_box {
+	width: 1200px;
+	height: 800px;
+	margin: auto;
+	background: #f8f8f8;
+	border: 1px solid #ddd;
+}

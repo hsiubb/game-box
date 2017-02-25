@@ -1,4 +1,3 @@
-
 var snowing = function() {
 	var snowflakes = [];
 	var count_wind;
@@ -9,7 +8,7 @@ var snowing = function() {
 					this.wind = 2;
 					snowZone.wind_next = 2;
 	        this.canvas.width = 1200;
-	        this.canvas.height = 900;
+	        this.canvas.height = 800;
 					this.frameNo = 0;
 	        this.context = this.canvas.getContext("2d");
 	        this.interval = setInterval(updateSnowZone, 20);
@@ -26,13 +25,10 @@ var snowing = function() {
 
 	function CountWind() {
 		this.context = snowZone.context;
-		// this.x = snowZone.canvas.width - 300;
-		// this.y = 20;
 
 		this.x = 0;
 		this.y = 0;
 
-		// myScore = new component('30px', 'consolas', 'white', 280, 40, 'text');
 		this.update = function() {
 			this.context.font = '30px consolas';
 			this.context.fillStyle = '#fff';
@@ -56,7 +52,7 @@ var snowing = function() {
 			if((this.x < -this.endX) || (this.x > this.endX*2) || (this.y > this.endY)) {
 				this.x = Number(this.endX * 3 * Math.random().toFixed(3) - this.endX);
 				if(this.x > 0 || this.x < this.endX) {
-					this.y = Number(this.endY * Math.random().toFixed(3) - this.endY / 2);
+					this.y = Number(this.endY * Math.random().toFixed(3) - this.endY);
 				} else {
 					this.y = Number(this.endY * Math.random().toFixed(3));
 				}
@@ -79,7 +75,7 @@ var snowing = function() {
 
 	function updateSnowZone() {
 		snowZone.clear();
-		if(everyinterval(1000)) {
+		if(snowZone.frameNo == 1 || everyinterval(1000)) {
 			snowZone.wind_next = Number((4*Math.random() - 2).toFixed(3));
 			if((snowZone.wind - snowZone.wind_before) > 2 ) {
 				snowZone.wind = snowZone.wind_before + 2;
@@ -101,7 +97,7 @@ var snowing = function() {
 	function get_snowflakes() {
 	    snowZone.start();
 			count_wind = new CountWind();
-			for(var i=0; i<300; i++) {
+			for(var i=0; i<1000; i++) {
 				snowflakes[i] = new Snowflakes();
 			}
 	}
