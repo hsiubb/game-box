@@ -1,0 +1,107 @@
+@charset 'utf-8';
+
+*{margin: 0;padding: 0;}
+*, :before, :after {-webkit-box-sizing: border-box;box-sizing: border-box;}
+html {font-family: Arial,"Microsoft YaHei";}
+a {color: inherit;text-decoration: none;outline-style: none;}
+ul, ol, li {list-style: none;}
+img {border: 0 none;}
+
+.fl {float: left; _display: inline;}
+.fr {float: right; _display: inline;}
+.clr {clear: both; height: 0; overflow: hidden;}
+.clrfix {*zoom: 1;}
+.clrfix:before, .clrfix:after {content: '\0020';display: block;height: 0;clear: both;visibility: hidden;}
+
+[class*="css-icon-"] {
+	position: relative;
+	display: block;
+	width: 1em;
+	height: 1em;
+	color: #666;
+	text-align: center;
+
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+}
+[class*="css-icon-"]:before,
+[class*="css-icon-"]:after {
+	content: '\0020';
+	position: absolute;
+	left: 0;
+	display: block;
+	width: 1em;
+	border-style: solid;
+	border-color: #ddd;
+	border-width: 0;
+	-webkit-transition: all .3s ease-in-out;
+	transition: all .3s ease-in-out;
+}
+
+.css-icon-menu:before {
+	top: 0;
+	bottom: .5em;
+	margin-bottom: -1px;
+	border-width: 2px 0;
+}
+.css-icon-menu:after {
+	top: .5em;
+	bottom: 0;
+	border-width: 0 0 2px;
+}
+
+.css-icon-close:before {
+	top: .5em;
+	margin-top: -1px;
+	border-width: 2px 0 0;
+	transform: rotate(45deg);
+}
+.css-icon-close:after {
+	bottom: .5em;
+	margin-bottom: -1px;
+	border-width: 0 0 2px;
+	transform: rotate(135deg);
+}
+
+.css-icon-grib {height: 1em;}
+.css-icon-grib:before {
+	top: 0;
+	height: .45em;
+	border-width: 0 .45em;
+}
+.css-icon-grib:after {
+	bottom: 0;
+	height: .45em;
+	border-width: 0 .45em;
+}
+
+.css-icon-user:before {
+	top: 0;
+	left: .25em;
+	width: .5em;
+	border-width: .25em;
+	border-radius: 50%;
+}
+.css-icon-user:after {
+	bottom: 0;
+	height: .5em;
+	border-width: .5em 0 0;
+	border-radius: .5em .5em 0 0;
+}
+
+
+
+
+.container {padding: 30px;}
+.icon-box {
+	float: left;
+	margin: 10px;
+	padding: .5em;
+	font-size: 40px;
+	border: 1px solid #ddd;
+	border-radius: .2em;
+}
