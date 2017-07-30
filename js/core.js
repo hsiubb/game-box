@@ -22,7 +22,8 @@ define(function() {
 					core.controller = core[game].controller;
 					core.controller.style.display = 'block';
 
-					core.curgame = game;
+					core.curname = game;
+					core.curgame = core[game];
 					core.running = core[game].running;
 					core.bgColor = core[game].bgColor;
 
@@ -31,8 +32,9 @@ define(function() {
 				});
 
 				val.onmouseenter = function() {
-					let focusBtn = core.mainController.querySelector('.focus-btn').removeClass('focus-btn');
-					this.addClass('focus-btn');
+					let focusBtn = core.mainController.querySelector('.focus-btn');
+					focusBtn && focusBtn.removeClass('focus-btn');
+					// this.addClass('focus-btn');
 				}
 			});
 			// 點擊進入遊戲界面.end
@@ -56,15 +58,6 @@ define(function() {
 				});
 			});
 			// 各遊戲結束按鈕.end
-
-			// 设置最高分
-			core.setHighScore = function() {
-				let cur_high = localStorage.getItem('game_' + core.curgame + '_highscore');
-				if(core[core.curgame].score > cur_high) {
-					core.controller.querySelector('.high-score').innerHTML = core[core.curgame].score;
-					localStorage.setItem('game_' + core.curgame + '_highscore', core[core.curgame].score);
-				}
-			}
 		},
 		clear: function() {
 			core.context.fillStyle = core.bgColor;
@@ -74,8 +67,8 @@ define(function() {
 		},
 		end: function() {
 			core.running = false;
+			core.curgame = false;
 			clearInterval(core.intervalClear);
-			core.setHighScore();
 
 			core.context.fillStyle = '#fff';
 			core.context.fillRect(0, 0, full_width, full_height);
@@ -86,30 +79,47 @@ define(function() {
 		},
 		pause: function() {
 			clearInterval(core.intervalClear);
-			core.setHighScore();
+			core.controller.querySelector('.high-score').innerHTML = core.curgame.score || 0;
+			localStorage.setItem('game_' + core.curname + '_highscore', core.curgame.score || 0);
 			core.controller.style.display = 'block';
 		}
 	};
 	// 初始化.end
 
 
-	// 按鍵觸發事件.start
-	core.keyDownFunc = {
-		Escape: core.pause,
-		ArrowLeft  : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')},
-		ArrowUp    : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')},
-		ArrowRight : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')},
-		ArrowDown  : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')}
-	};
-	// 按鍵觸發事件.end
+	// // 按鍵觸發事件.start
+	// core.keyDownFunc = {
+	// 	Escape: core.pause,
+	// 	ArrowLeft  : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')},
+	// 	ArrowUp    : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')},
+	// 	ArrowRight : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')},
+	// 	ArrowDown  : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')}
+	// };
+	// // 按鍵觸發事件.end
+	//
+	//
+	// // 結束.start
+	// document.onkeydown = function(evnt) {
+	// 	let keyFunc = core.keyDownFunc[evnt.key];
+	// 	(typeof keyFunc === 'function') ? keyFunc() : '';
+	// };
+	// // 結束.end
+	//
+	// core.controller.onmousemove = function() {
+	// 	// let focusBtn = core.controller.querySelector('.focus-btn');
+	// 	// if(focusBtn) {
+	// 	// 	focusBtn.removeClass('focus-btn');
+	// 	// }
+	// };
+  document.querySelector('body').addEventListener('keydown', function(evnt) {
+    core.curgame && core.curgame.keyEvent(event.key);
+  });
 
-
-	// 結束.start
-	document.onkeydown = function(evnt) {
-		let keyFunc = core.keyDownFunc[evnt.key];
-		(typeof keyFunc === 'function') ? keyFunc() : '';
-	};
-	// 結束.end
+	document.querySelector('body').addEventListener('mousemove', function(evnt) {
+		core.evntX = evnt.pageX;
+		core.evntY = evnt.pageY;
+    core.curgame && core.curgame.setPosition && core.setPosition();
+	});
 
 	return core;
 });

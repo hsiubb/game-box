@@ -1,8 +1,7 @@
-define(['core', 'foo', 'bar'], function(core) {
-	Object.prototype.hasClass = function(class_name) {
-		let reg = new RegExp(class_name);
-		return reg.test(this.getAttribute('class'));
-	};
+define(['core', 'snake', 'dodge'], function(core) {
+  Object.prototype.hasClass = function(class_name) {
+    return new RegExp('\('+class_name+'\[\\s\\uFEFF\\xA0\]+\|\[\\s\\uFEFF\\xA0\]+'+class_name+'\)\|\^'+class_name+'\$').test(this.getAttribute('class'));
+  };
 	Object.prototype.addClass = function(class_name) {
 		if(!this.hasClass(class_name)) {
 			let pre_class = this.getAttribute('class') || '';
@@ -19,6 +18,7 @@ define(['core', 'foo', 'bar'], function(core) {
 		var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 		return this == null ? "" : ( this + "" ).replace( rtrim, "" );
 	}
+
 
 	let args = Array.prototype.slice.call(arguments, 1);
 	args.map(function(val) {
@@ -40,8 +40,6 @@ define(['core', 'foo', 'bar'], function(core) {
 			'<span class="high-score">' + core[val].menu.highScore + '</span>' +
 			'<br>' +
 			'<a class="start-btn start" href="javascript:;" data-start="' + val + '">start</a>' +
-			'<br>' +
-			'<br>' +
 			'<a class="game-btn menu" href="javascript:;">menu</a>';
 		core[val].controller = menu;
 		let body = document.getElementsByTagName('body')[0];
