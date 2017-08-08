@@ -1,7 +1,10 @@
+const FULL_WIDTH = window.innerWidth;
+const FULL_HEIGHT = window.innerHeight;
+
 define(['core', 'snake', 'dodge'], function(core) {
-  Object.prototype.hasClass = function(class_name) {
-    return new RegExp('\('+class_name+'\[\\s\\uFEFF\\xA0\]+\|\[\\s\\uFEFF\\xA0\]+'+class_name+'\)\|\^'+class_name+'\$').test(this.getAttribute('class'));
-  };
+	Object.prototype.hasClass = function(class_name) {
+		return new RegExp('\('+class_name+'\[\\s\\uFEFF\\xA0\]+\|\[\\s\\uFEFF\\xA0\]+'+class_name+'\)\|\^'+class_name+'\$').test(this.getAttribute('class'));
+	};
 	Object.prototype.addClass = function(class_name) {
 		if(!this.hasClass(class_name)) {
 			let pre_class = this.getAttribute('class') || '';
@@ -37,8 +40,7 @@ define(['core', 'snake', 'dodge'], function(core) {
 		core[val].menu.highScore = localStorage.getItem('game_' + val + '_highscore') || 0;
 		menu.innerHTML = '<h2>' + core[val].menu.name + '</h2>' +
 			'<p>' + core[val].menu.info + '</p>' +
-			'<span class="high-score">' + core[val].menu.highScore + '</span>' +
-			'<br>' +
+			'<p class="high-score">high-score: ' + core[val].menu.highScore + '</p>' +
 			'<a class="start-btn start" href="javascript:;" data-start="' + val + '">start</a>' +
 			'<a class="game-btn menu" href="javascript:;">menu</a>';
 		core[val].controller = menu;
