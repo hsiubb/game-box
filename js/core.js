@@ -100,6 +100,7 @@ define(function() {
 		},
 		end: function() {
 			clearInterval(core.intervalClear);
+			core.canvas.removeClass('game-playing');
 			if(core.score > localStorage.getItem('game_' + core.curname + '_highscore')) {
 				core.controller.querySelector('.high-score').innerHTML = 'high-score: ' + (core.score || 0);
 				localStorage.setItem('game_' + core.curname + '_highscore', core.score || 0);

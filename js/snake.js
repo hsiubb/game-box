@@ -16,7 +16,7 @@ define(['core'], function(core) {
 		},
 
 		path: 'ArrowUp',
-		baseSpeed: 4,
+		baseSpeed: 3,
 		difficulty: 50,
 		snakeColor: '#fff',
 		body: [],
@@ -43,8 +43,9 @@ define(['core'], function(core) {
 				core.snake.x > core.snake.width ||
 				core.snake.y < 0 ||
 				core.snake.y > core.snake.height ||
-				core.snake.body.indexOf([core.snake.x, core.snake.y]) > -1
+				core.snake.body.filter(function(val) {return (val[0] === core.snake.x && val[1] === core.snake.y);}).length
 			) {
+				core.snake.path = 'ArrowUp';
 				core.end();
 			}
 
@@ -59,19 +60,19 @@ define(['core'], function(core) {
 			core.snake.body.shift();
 		},
 		running: function() {
-			core.score++;
+			core.snake.time++;
 
 			core.snake.dropfood();
-
 			core.snake.body.map(function(val) {
 				core.context.fillStyle = core.snake.snakeColor;
 				core.context.fillRect(val[0] * core.snake.size + 1, val[1] * core.snake.size + 1, core.snake.size - 2, core.snake.size - 2);
 			});
 
-			(core.score % core.snake.baseSpeed === 0) && core.snake.walk();
+			(core.snake.time % core.snake.baseSpeed === 0) && core.snake.walk();
 		},
 		start: function() {
 			core.score = 0;
+			core.snake.time = 0;
 
 			this.size = Math.max(Math.min(FULL_WIDTH / this.difficulty, FULL_HEIGHT / this.difficulty, 20), 10);
 			this.x = Math.floor(FULL_WIDTH / this.size / 2);
