@@ -1,6 +1,10 @@
 const FULL_WIDTH = window.innerWidth;
 const FULL_HEIGHT = window.innerHeight;
 
+const COLOR_WHITE  = '#fff';
+const COLOR_BLUE   = '#38c';
+const COLOR_ORANGE = '#f90';
+
 Object.prototype.hasClass = function(class_name) {
 	return new RegExp('\('+class_name+'\[\\s\\uFEFF\\xA0\]+\|\[\\s\\uFEFF\\xA0\]+'+class_name+'\)\|\^'+class_name+'\$').test(this.getAttribute('class'));
 };

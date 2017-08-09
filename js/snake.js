@@ -4,7 +4,7 @@ define(['core'], function(core) {
 			name: 'snake',
 			info: 'control: arrowkey'
 		},
-		bgColor: '#38c',
+		bgColor: COLOR_BLUE,
 		keys: ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'],
 		keyEvent: function(key) {
 			switch(key) {
@@ -15,10 +15,12 @@ define(['core'], function(core) {
 			}
 		},
 
+		paddingColor: COLOR_WHITE,
 		path: 'ArrowUp',
 		baseSpeed: 3,
 		difficulty: 50,
-		snakeColor: '#fff',
+		foodScore: 100,
+		snakeColor: COLOR_WHITE,
 		body: [],
 
 		dropfood: function() {
@@ -50,7 +52,7 @@ define(['core'], function(core) {
 			}
 
 			if(core.snake.x === core.snake.foodx && core.snake.y === core.snake.foody) {
-				core.score += 10;
+				core.score += core.snake.foodScore;
 				core.snake.body.unshift([-2, -2]);
 				core.snake.foodx = Math.floor(Math.random() * this.width);
 				core.snake.foody = Math.floor(Math.random() * this.height);
@@ -60,6 +62,7 @@ define(['core'], function(core) {
 			core.snake.body.shift();
 		},
 		running: function() {
+			core.clearPadding(core.curgame.paddingColor);
 			core.snake.time++;
 
 			core.snake.dropfood();
@@ -71,7 +74,6 @@ define(['core'], function(core) {
 			(core.snake.time % core.snake.baseSpeed === 0) && core.snake.walk();
 		},
 		start: function() {
-			core.score = 0;
 			core.snake.time = 0;
 
 			this.size = Math.max(Math.min(FULL_WIDTH / this.difficulty, FULL_HEIGHT / this.difficulty, 20), 10);

@@ -8,7 +8,7 @@
 // 			name: 'NameOfGame',
 // 			info: 'control: ..'
 // 		},
-// 		bgColor: '#fff',
+// 		bgColor: COLOR_WHITE,
 // 		keys: [],
 // 		keyEvent: function(key) {},
 // 		running: function() {
@@ -21,32 +21,36 @@
 //
 //////////////////////////////////////////////////
 
+// musics https://www.youtube.com/audiolibrary/music
+
 define(function() {
 	// 初始化.start
 	let core = {
+		evntX: FULL_WIDTH / 2,
+		evntY: FULL_HEIGHT / 2,
 		canvas: document.getElementById('gameBox'),
 		controller: document.getElementById('gameController'),
 		mainController: document.getElementById('gameController'),
-		infosColor: '#fff',
+		infosColor: COLOR_WHITE,
 		units: {
 			ship: function(size, color) {
 				return {
 					left:   core.evntX - size / 2,
 					right:  core.evntX + size / 2,
-					top:    core.evntY - (size - 2) / 2,
-					bottom: core.evntY + (size - 2) / 2,
-					update: function(x, y) {
-						this.left = x - size / 2;
-						this.right = x + size / 2;
-						this.top = y - (size - 2) / 2;
-						this.bottom = y + (size - 2) / 2;
+					top:    core.evntY - size / 2,
+					bottom: core.evntY + (size - 4) / 2,
+					update: function() {
+						this.left   = core.evntX - size / 2;
+						this.right  = core.evntX + size / 2;
+						this.top    = core.evntY - size / 2;
+						this.bottom = core.evntY + size / 2 - 2;
 						core.context.beginPath();
-						core.context.moveTo( this.left , this.bottom    );
-						core.context.lineTo( x - 1     , y + size * .35 );
-						core.context.lineTo( x - 1     , y - size * .35 );
-						core.context.moveTo( x + 1     , y - size * .35 );
-						core.context.lineTo( x + 1     , y + size * .35 );
-						core.context.lineTo( this.right, this.bottom    );
+						core.context.moveTo( this.left      , this.bottom             );
+						core.context.lineTo( core.evntX - 1 , core.evntY + size * .3  );
+						core.context.lineTo( core.evntX - 1 , this.top                );
+						core.context.moveTo( core.evntX + 1 , this.top                );
+						core.context.lineTo( core.evntX + 1 , core.evntY + size * .3  );
+						core.context.lineTo( this.right     , this.bottom             );
 						core.context.closePath();
 						core.context.fillStyle = color;
 						core.context.fill();
@@ -55,8 +59,8 @@ define(function() {
 			},
 			shield: function(size, color) {
 				return {
-					x:      core.evntX,
-					y:      core.evntY,
+					x: core.evntX,
+					y: core.evntY,
 
 					shield: true,
 					radius_speed : Math.PI / 24,
@@ -81,7 +85,7 @@ define(function() {
 						}
 						// if(this.shield_num > 0) {
 						// 	core.context.font = '14px Arial';
-						// 	core.context.fillStyle = '#fff';
+						// 	core.context.fillStyle = COLOR_WHITE;
 						// 	core.context.fillText('shield: '+this.shield_num, full_width - 104, full_height - 40);
 						// }
 					}
@@ -102,9 +106,20 @@ define(function() {
 			setTimeout(function() {core.infosColor = '#bbb'}, 850);
 			setTimeout(function() {
 				core.infos = function(){};
-				core.infosColor = '#fff';
+				core.infosColor = COLOR_WHITE;
 			}, 1000);
 		},
+		showScore: function() {
+			core.context.font = '24px Arial';
+			core.context.fillStyle = core.infosColor;
+			core.context.fillText('score: ' + core.score, FULL_WIDTH - 150, 50);
+		},
+		clearPadding: function(color) {
+			core.context.fillStyle = color;
+			core.context.fillRect(0, core.curgame.size * core.curgame.height, FULL_WIDTH, FULL_HEIGHT);
+			core.context.fillRect(core.curgame.size * core.curgame.width, 0, FULL_WIDTH, FULL_HEIGHT);
+		},
+		keepZone: function(x, y) {},
 		start: function() {
 			this.context = this.canvas.getContext("2d");
 			this.canvas.style.width = this.canvas.width = FULL_WIDTH;
@@ -145,12 +160,12 @@ define(function() {
 				val.addEventListener('click', function(evnt) {
 					core.controller.style.display = 'none';
 					core.canvas.addClass('game-playing');
+					core.score = 0;
 					core.curgame.start();
 					core.intervalClear = setInterval(core.clear, 30);
 				});
 			});
 			// 點擊開始按鈕執行當前遊戲.end
-
 
 			// 各遊戲結束按鈕.start
 			core.endBtns = Array.prototype.slice.call(document.querySelectorAll('.menu'));
@@ -166,6 +181,7 @@ define(function() {
 			core.context.fillRect(0, 0, FULL_WIDTH, FULL_HEIGHT);
 
 			core.running();
+			core.showScore();
 			core.infos();
 		},
 		menu: function() {
@@ -173,7 +189,7 @@ define(function() {
 			core.curgame = false;
 			clearInterval(core.intervalClear);
 
-			core.context.fillStyle = '#fff';
+			core.context.fillStyle = COLOR_WHITE;
 			core.context.fillRect(0, 0, FULL_WIDTH, FULL_HEIGHT);
 
 			core.canvas.removeClass('game-playing');
@@ -227,7 +243,7 @@ define(function() {
 	document.querySelector('body').addEventListener('mousemove', function(evnt) {
 		core.evntX = evnt.pageX;
 		core.evntY = evnt.pageY;
-		core.curgame && core.curgame.setPosition && core.setPosition();
+		// core.curgame && core.curgame.setPosition && core.setPosition();
 	});
 
 	return core;

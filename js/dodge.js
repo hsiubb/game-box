@@ -4,10 +4,11 @@ define(['core'], function(core) {
 			name: 'dodge',
 			info: 'control: mouse'
 		},
-		bgColor: '#38c',
+		bgColor: COLOR_BLUE,
 		keys: [],
 		keyEvent: function(key) {},
 
+		slipScore: 100,
 		baseSpeed: Math.pow(FULL_WIDTH * FULL_HEIGHT / 500000, 1/2),
 		accuracy: 50,
 
@@ -18,7 +19,7 @@ define(['core'], function(core) {
 			bullet.speedX = core.dodge.baseSpeed * bullet.targetX / bullet.speed;
 			bullet.speedY = core.dodge.baseSpeed * bullet.targetY / bullet.speed;
 		},
-		ship: core.units.ship(14, '#f90'),
+		ship: core.units.ship(14, COLOR_ORANGE),
 		barrage: {
 			density: Math.floor(Math.pow(FULL_WIDTH * FULL_HEIGHT / 3, 1/2)),
 			bulletUpdate: function(bullet) {
@@ -30,11 +31,11 @@ define(['core'], function(core) {
 					bullet.y >= core.dodge.ship.top &&
 					bullet.y <= core.dodge.ship.bottom
 				) {
-					if(Math.abs((bullet.x - core.evntX) / (bullet.y - core.evntY)) < .8) {
+					if(Math.abs((bullet.x - core.evntX) / (bullet.y - core.evntY)) < .6) {
 						core.end();
 					} else {
 						if(core.infos() !== 'showing info') {
-							core.score += 10;
+							core.score += core.dodge.slipScore;
 							core.showInfo('slip!');
 						}
 					}
@@ -61,7 +62,7 @@ define(['core'], function(core) {
 					}
 					core.dodge.target(bullet);
 				}
-				core.context.fillStyle = '#fff';
+				core.context.fillStyle = COLOR_WHITE;
 				core.context.fillRect(bullet.x - 1, bullet.y - 1, 2, 2);
 			},
 			bullets: function() {
@@ -93,7 +94,6 @@ define(['core'], function(core) {
 			core.dodge.ship.update();
 		},
 		start: function() {
-			core.score = 0;
 			core.dodge.barrage.bullets();
 		}
 	};
