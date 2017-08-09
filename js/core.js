@@ -1,3 +1,26 @@
+//////////////////////////////////////////////////
+//
+// ### define new game ###
+//
+// define(['core'], function(core) {
+// 	core.NameOfGame = {
+// 		menu: {
+// 			name: 'NameOfGame',
+// 			info: 'control: ..'
+// 		},
+// 		bgColor: '#fff',
+// 		keys: [],
+// 		keyEvent: function(key) {},
+// 		running: function() {
+// 		},
+// 		start: function() {
+// 		}
+// 	}
+// 	return 'NameOfGame';
+// });
+//
+//////////////////////////////////////////////////
+
 define(function() {
 	// 初始化.start
 	let core = {
@@ -5,6 +28,66 @@ define(function() {
 		controller: document.getElementById('gameController'),
 		mainController: document.getElementById('gameController'),
 		infosColor: '#fff',
+		units: {
+			ship: function(size, color) {
+				return {
+					left:   core.evntX - size / 2,
+					right:  core.evntX + size / 2,
+					top:    core.evntY - (size - 2) / 2,
+					bottom: core.evntY + (size - 2) / 2,
+					update: function(x, y) {
+						this.left = x - size / 2;
+						this.right = x + size / 2;
+						this.top = y - (size - 2) / 2;
+						this.bottom = y + (size - 2) / 2;
+						core.context.beginPath();
+						core.context.moveTo( this.left , this.bottom    );
+						core.context.lineTo( x - 1     , y + size * .35 );
+						core.context.lineTo( x - 1     , y - size * .35 );
+						core.context.moveTo( x + 1     , y - size * .35 );
+						core.context.lineTo( x + 1     , y + size * .35 );
+						core.context.lineTo( this.right, this.bottom    );
+						core.context.closePath();
+						core.context.fillStyle = color;
+						core.context.fill();
+					}
+				};
+			},
+			shield: function(size, color) {
+				return {
+					x:      core.evntX,
+					y:      core.evntY,
+
+					shield: true,
+					radius_speed : Math.PI / 24,
+					radiu_piece: 6,
+					radiu_start : 0,
+					shield_color: color,
+					shield_num : 1,
+
+					update: function() {
+						this.x = core.evntX;
+						this.y = core.evntY;
+						this.radiu_start += this.radius_speed;
+						this.radiu_start %= (Math.PI * 2);
+						if(this.shield) {
+							for(let i = 0; i < this.radiu_piece; i++) {
+								core.context.beginPath();
+								core.context.arc(this.x, this.y, size, this.radiu_start + Math.PI / 3 * i, this.radiu_start + Math.PI / 6 + Math.PI / 3 * i);
+								core.context.closePath();
+								core.context.fillStyle = this.shield_color;
+								core.context.fill();
+							}
+						}
+						// if(this.shield_num > 0) {
+						// 	core.context.font = '14px Arial';
+						// 	core.context.fillStyle = '#fff';
+						// 	core.context.fillText('shield: '+this.shield_num, full_width - 104, full_height - 40);
+						// }
+					}
+				};
+			}
+		},
 		infos: function() {},
 		showInfo: function(txt) {
 			core.infos = function() {

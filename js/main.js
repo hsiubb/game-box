@@ -1,30 +1,29 @@
 const FULL_WIDTH = window.innerWidth;
 const FULL_HEIGHT = window.innerHeight;
 
-define(['core', 'snake', 'dodge'], function(core) {
-	Object.prototype.hasClass = function(class_name) {
-		return new RegExp('\('+class_name+'\[\\s\\uFEFF\\xA0\]+\|\[\\s\\uFEFF\\xA0\]+'+class_name+'\)\|\^'+class_name+'\$').test(this.getAttribute('class'));
-	};
-	Object.prototype.addClass = function(class_name) {
-		if(!this.hasClass(class_name)) {
-			let pre_class = this.getAttribute('class') || '';
-			this.setAttribute('class', (pre_class.trim() + ' ' + class_name).trim());
-		}
-	};
-	Object.prototype.removeClass = function(class_name) {
-		if(this.hasClass(class_name)) {
-			let pre_class = this.getAttribute('class');
-			this.setAttribute('class', pre_class.replace(class_name, '').trim());
-		}
-	};
-	String.prototype.trim = function() {
-		var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-		return this == null ? "" : ( this + "" ).replace( rtrim, "" );
+Object.prototype.hasClass = function(class_name) {
+	return new RegExp('\('+class_name+'\[\\s\\uFEFF\\xA0\]+\|\[\\s\\uFEFF\\xA0\]+'+class_name+'\)\|\^'+class_name+'\$').test(this.getAttribute('class'));
+};
+Object.prototype.addClass = function(class_name) {
+	if(!this.hasClass(class_name)) {
+		let pre_class = this.getAttribute('class') || '';
+		this.setAttribute('class', (pre_class.trim() + ' ' + class_name).trim());
 	}
+};
+Object.prototype.removeClass = function(class_name) {
+	if(this.hasClass(class_name)) {
+		let pre_class = this.getAttribute('class');
+		this.setAttribute('class', pre_class.replace(class_name, '').trim());
+	}
+};
+String.prototype.trim = function() {
+	var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+	return this == null ? "" : ( this + "" ).replace( rtrim, "" );
+}
 
-
-	let args = Array.prototype.slice.call(arguments, 1);
-	args.map(function(val) {
+define(['core', 'snake', 'dodge', 'raiden'], function(core) {
+	let games = Array.prototype.slice.call(arguments, 1);
+	games.map(function(val) {
 		let anchor = document.createElement('a');
 		let class_name = arguments[1] === 0 ? 'game-btn focus-btn' : 'game-btn';
 		anchor.setAttribute('class', class_name);
