@@ -25,6 +25,10 @@ String.prototype.trim = function() {
 	return this == null ? "" : ( this + "" ).replace( rtrim, "" );
 }
 
+function abvleToRadian(x) {
+	return x === +x && Math.PI * 2 * x / 360;
+}
+
 define(['core', 'snake', 'dodge', 'raiden'], function(core) {
 	let games = Array.prototype.slice.call(arguments, 1);
 	games.map(function(val) {

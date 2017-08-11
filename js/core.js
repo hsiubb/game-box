@@ -28,6 +28,8 @@ define(function() {
 	let core = {
 		evntX: FULL_WIDTH / 2,
 		evntY: FULL_HEIGHT / 2,
+		gameTime: 0,
+		frameRate: 30,
 		canvas: document.getElementById('gameBox'),
 		controller: document.getElementById('gameController'),
 		mainController: document.getElementById('gameController'),
@@ -134,10 +136,11 @@ define(function() {
 					core.controller = core[game].controller;
 					core.controller.style.display = 'block';
 
-					core.curname = game;
-					core.curgame = core[game];
-					core.running = core[game].running;
-					core.bgColor = core[game].bgColor;
+					core.gameTime = 0;
+					core.curname  = game;
+					core.curgame  = core[game];
+					core.running  = core[game].running;
+					core.bgColor  = core[game].bgColor;
 					// core.curgame.start();
 
 					// core.unitSize = Math.max(Math.min(FULL_WIDTH / core.curgame.difficulty, FULL_HEIGHT / core.curgame.difficulty, 20), 10);
@@ -162,7 +165,7 @@ define(function() {
 					core.canvas.addClass('game-playing');
 					core.score = 0;
 					core.curgame.start();
-					core.intervalClear = setInterval(core.clear, 30);
+					core.intervalClear = setInterval(core.clear, core.frameRate);
 				});
 			});
 			// 點擊開始按鈕執行當前遊戲.end
@@ -178,6 +181,7 @@ define(function() {
 		},
 		clear: function() {
 			core.context.fillStyle = core.bgColor;
+			core.gameTime++;
 			core.context.fillRect(0, 0, FULL_WIDTH, FULL_HEIGHT);
 
 			core.running();
@@ -237,13 +241,28 @@ define(function() {
 	document.querySelector('body').addEventListener('keydown', function(evnt) {
 		evnt.key === 'Escape' && core.menu();
 
-		core.curgame && core.curgame.keys.indexOf(event.key) >= 0 && core.curgame.keyEvent(event.key);
+		core.curgame && core.running && core.curgame.keys.indexOf(event.key) >= 0 && core.curgame.keyEvent(event.key);
+	});
+
+	document.querySelector('body').addEventListener('mousedown', function(evnt) {
+		if(core.curgame && core.running && core.curgame.keys.indexOf('mousedown') >= 0) {
+			core.mousedown = setInterval(function() {core.curgame.keyEvent(evnt)}, core.frameRate);
+		}
+	});
+	document.querySelector('body').addEventListener('mouseup', function(evnt) {
+		if(core.curgame && core.running && core.curgame.keys.indexOf('mousedown') >= 0) {
+			clearInterval(core.mousedown);
+		}
+	});
+	document.querySelector('body').addEventListener('mouseout', function(evnt) {
+		if(core.curgame && core.running && core.curgame.keys.indexOf('mousedown') >= 0) {
+			clearInterval(core.mousedown);
+		}
 	});
 
 	document.querySelector('body').addEventListener('mousemove', function(evnt) {
 		core.evntX = evnt.pageX;
 		core.evntY = evnt.pageY;
-		// core.curgame && core.curgame.setPosition && core.setPosition();
 	});
 
 	return core;

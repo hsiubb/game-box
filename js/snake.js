@@ -63,7 +63,6 @@ define(['core'], function(core) {
 		},
 		running: function() {
 			core.clearPadding(core.curgame.paddingColor);
-			core.snake.time++;
 
 			core.snake.dropfood();
 			core.snake.body.map(function(val) {
@@ -71,11 +70,9 @@ define(['core'], function(core) {
 				core.context.fillRect(val[0] * core.snake.size + 1, val[1] * core.snake.size + 1, core.snake.size - 2, core.snake.size - 2);
 			});
 
-			(core.snake.time % core.snake.baseSpeed === 0) && core.snake.walk();
+			(core.gameTime % core.snake.baseSpeed === 0) && core.snake.walk();
 		},
 		start: function() {
-			core.snake.time = 0;
-
 			this.size = Math.max(Math.min(FULL_WIDTH / this.difficulty, FULL_HEIGHT / this.difficulty, 20), 10);
 			this.x = Math.floor(FULL_WIDTH / this.size / 2);
 			this.y = Math.floor(FULL_HEIGHT / this.size / 2);
