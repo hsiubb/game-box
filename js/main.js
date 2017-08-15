@@ -25,7 +25,7 @@ String.prototype.trim = function() {
 	return this == null ? "" : ( this + "" ).replace( rtrim, "" );
 }
 
-function abvleToRadian(x) {
+function angleToRadian(x) {
 	return x === +x && Math.PI * 2 * x / 360;
 }
 

@@ -5,8 +5,7 @@ define(['core'], function(core) {
 			info: 'control: mouse'
 		},
 		bgColor: COLOR_BLUE,
-		keys: [],
-		keyEvent: function(key) {},
+		keyEvent: {},
 
 		slipScore: 100,
 		baseSpeed: Math.pow(FULL_WIDTH * FULL_HEIGHT / 500000, 1/2),

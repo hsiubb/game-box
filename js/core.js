@@ -9,8 +9,7 @@
 // 			info: 'control: ..'
 // 		},
 // 		bgColor: COLOR_WHITE,
-// 		keys: [],
-// 		keyEvent: function(key) {},
+// 		keyEvent: {},
 // 		running: function() {
 // 		},
 // 		start: function() {
@@ -41,18 +40,20 @@ define(function() {
 					right:  core.evntX + size / 2,
 					top:    core.evntY - size / 2,
 					bottom: core.evntY + (size - 4) / 2,
-					update: function() {
-						this.left   = core.evntX - size / 2;
-						this.right  = core.evntX + size / 2;
-						this.top    = core.evntY - size / 2;
-						this.bottom = core.evntY + size / 2 - 2;
+					update: function(x, y) {
+						let cur_x = x || core.evntX;
+						let cur_y = y || core.evntY;
+						this.left   = cur_x - size / 2;
+						this.right  = cur_x + size / 2;
+						this.top    = cur_y - size / 2;
+						this.bottom = cur_y + size / 2 - 2;
 						core.context.beginPath();
-						core.context.moveTo( this.left      , this.bottom             );
-						core.context.lineTo( core.evntX - 1 , core.evntY + size * .3  );
-						core.context.lineTo( core.evntX - 1 , this.top                );
-						core.context.moveTo( core.evntX + 1 , this.top                );
-						core.context.lineTo( core.evntX + 1 , core.evntY + size * .3  );
-						core.context.lineTo( this.right     , this.bottom             );
+						core.context.moveTo( this.left  , this.bottom       );
+						core.context.lineTo( cur_x - 1  , cur_y + size * .3 );
+						core.context.lineTo( cur_x - 1  , this.top          );
+						core.context.moveTo( cur_x + 1  , this.top          );
+						core.context.lineTo( cur_x + 1  , cur_y + size * .3 );
+						core.context.lineTo( this.right , this.bottom       );
 						core.context.closePath();
 						core.context.fillStyle = color;
 						core.context.fill();
@@ -214,55 +215,28 @@ define(function() {
 	// 初始化.end
 
 
-	// 按鍵觸發事件.start
-	// core.keyDownFunc = {
-	// 	Escape: core.end,
-	// 	ArrowLeft  : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')},
-	// 	ArrowUp    : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')},
-	// 	ArrowRight : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')},
-	// 	ArrowDown  : function() {core.controller.querySelector('.game-btn').addClass('focus-btn')}
-	// };
-	// 按鍵觸發事件.end
-	//
-	//
-	// 結束.start
-	// document.onkeydown = function(evnt) {
-	// 	let keyFunc = core.keyDownFunc[evnt.key];
-	// 	(typeof keyFunc === 'function') ? keyFunc() : '';
-	// };
-	// 結束.end
-	//
-	// core.controller.onmousemove = function() {
-	// 	// let focusBtn = core.controller.querySelector('.focus-btn');
-	// 	// if(focusBtn) {
-	// 	// 	focusBtn.removeClass('focus-btn');
-	// 	// }
-	// };
-	document.querySelector('body').addEventListener('keydown', function(evnt) {
-		evnt.key === 'Escape' && core.menu();
-
-		core.curgame && core.running && core.curgame.keys.indexOf(event.key) >= 0 && core.curgame.keyEvent(event.key);
-	});
-
-	document.querySelector('body').addEventListener('mousedown', function(evnt) {
-		if(core.curgame && core.running && core.curgame.keys.indexOf('mousedown') >= 0) {
-			core.mousedown = setInterval(function() {core.curgame.keyEvent(evnt)}, core.frameRate);
-		}
-	});
-	document.querySelector('body').addEventListener('mouseup', function(evnt) {
-		if(core.curgame && core.running && core.curgame.keys.indexOf('mousedown') >= 0) {
-			clearInterval(core.mousedown);
-		}
-	});
-	document.querySelector('body').addEventListener('mouseout', function(evnt) {
-		if(core.curgame && core.running && core.curgame.keys.indexOf('mousedown') >= 0) {
-			clearInterval(core.mousedown);
-		}
-	});
-
-	document.querySelector('body').addEventListener('mousemove', function(evnt) {
+	document.oncontextmenu = function(evnt){return false;}
+	document.addEventListener('mousemove', function(evnt) {
 		core.evntX = evnt.pageX;
 		core.evntY = evnt.pageY;
+	});
+
+	core.runEvent = function(evnt) {
+		core.curgame && core.curgame.keyEvent.hasOwnProperty(evnt) && core.curgame.keyEvent[evnt](evnt);
+	};
+	document.addEventListener('mousedown', function(evnt) {
+		core.runEvent('mousedown');
+	});
+	document.addEventListener('mouseup', function(evnt) {
+		core.runEvent('mouseup');
+	});
+	document.addEventListener('keydown', function(evnt) {
+		evnt.key === 'Escape' && core.menu();
+
+		core.runEvent(evnt.key);
+	});
+	document.addEventListener('keyup', function(evnt) {
+		core.runEvent(evnt.key+'_up');
 	});
 
 	return core;

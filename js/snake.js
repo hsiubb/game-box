@@ -5,13 +5,18 @@ define(['core'], function(core) {
 			info: 'control: arrowkey'
 		},
 		bgColor: COLOR_BLUE,
-		keys: ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'],
-		keyEvent: function(key) {
-			switch(key) {
-				case 'ArrowUp':    core.snake.path !== 'ArrowDown'  && (core.snake.path = key); break;
-				case 'ArrowDown':  core.snake.path !== 'ArrowUp'    && (core.snake.path = key); break;
-				case 'ArrowLeft':  core.snake.path !== 'ArrowRight' && (core.snake.path = key); break;
-				case 'ArrowRight': core.snake.path !== 'ArrowLeft'  && (core.snake.path = key); break;
+		keyEvent: {
+			'ArrowUp': function() {
+				core.snake.path !== 'ArrowDown'  && (core.snake.path = 'ArrowUp');
+			},
+			'ArrowDown': function() {
+				core.snake.path !== 'ArrowUp'    && (core.snake.path = 'ArrowDown');
+			},
+			'ArrowLeft': function() {
+				core.snake.path !== 'ArrowRight' && (core.snake.path = 'ArrowLeft');
+			},
+			'ArrowRight': function() {
+				core.snake.path !== 'ArrowLeft'  && (core.snake.path = 'ArrowRight');
 			}
 		},
 
