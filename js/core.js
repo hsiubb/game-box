@@ -34,12 +34,12 @@ define(function() {
 		mainController: document.getElementById('gameController'),
 		infosColor: COLOR_WHITE,
 		units: {
-			ship: function(size, color) {
+			ship: function(size, color, x, y, angle) {
 				return {
-					left:   core.evntX - size / 2,
-					right:  core.evntX + size / 2,
-					top:    core.evntY - size / 2,
-					bottom: core.evntY + (size - 4) / 2,
+					left:   (x || core.evntX) - size / 2,
+					right:  (x || core.evntX) + size / 2,
+					top:    (y || core.evntY) - size / 2,
+					bottom: (y || core.evntY) + (size - 4) / 2,
 					update: function(x, y) {
 						let cur_x = x || core.evntX;
 						let cur_y = y || core.evntY;
@@ -47,16 +47,20 @@ define(function() {
 						this.right  = cur_x + size / 2;
 						this.top    = cur_y - size / 2;
 						this.bottom = cur_y + size / 2 - 2;
+						core.context.save();
 						core.context.beginPath();
-						core.context.moveTo( this.left  , this.bottom       );
-						core.context.lineTo( cur_x - 1  , cur_y + size * .3 );
-						core.context.lineTo( cur_x - 1  , this.top          );
-						core.context.moveTo( cur_x + 1  , this.top          );
-						core.context.lineTo( cur_x + 1  , cur_y + size * .3 );
-						core.context.lineTo( this.right , this.bottom       );
+						core.context.translate(cur_x, cur_y);
+						angle && core.context.rotate(angleToRadian(angle));
+						core.context.moveTo( - size / 2 , size / 2 - 2 );
+						core.context.lineTo( - 1        , size * .3    );
+						core.context.lineTo( - 1        , - size / 2   );
+						core.context.moveTo(   1        , - size / 2   );
+						core.context.lineTo(   1        , size * .3    );
+						core.context.lineTo( size / 2   , size / 2 - 2 );
 						core.context.closePath();
 						core.context.fillStyle = color;
 						core.context.fill();
+						core.context.restore();
 					}
 				};
 			},
